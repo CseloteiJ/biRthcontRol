@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import argparse, json, logging, csv, re, sys, codecs, re
 from pathlib import Path
 import pandas as pd
@@ -52,17 +49,18 @@ for year in range(1900,2018):
         for element in data:
             peoplelist.append([element[x] for x in indexedIC])
 
-monthsDays = []
+finalDates = []
 
 for element in peoplelist:
     for date in element:
         if not any(x in date for x in ['{', 'T', '}']): 
-            monthsDays.append(date[5:10])
+            finalDates.append(date.split('-'))
         
-    
-with open('birthDays.csv', 'w') as file:
-    csvwriter = csv.writer(file, delimiter=',')
-    for item in monthsDays:
+months = [x[1] for x in finalDates]
+
+
+with open('birthdates.csv', 'w') as file:
+    for item in months:
         file.write(item + '\n')
 
 
