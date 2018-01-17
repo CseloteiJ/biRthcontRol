@@ -127,6 +127,100 @@ xlab("Month of Birth") +
 ylab("Frequency") +
 ggtitle("Amount of Births in Australia per Month as Registered by UN")
 
+# opened under specific names now because they need to be used in relation to each other
+aussie = read.csv('birthsAustralia.csv', header=FALSE)
+dutch = read.csv('birthsNetherlands.csv', header=FALSE)
+sing = read.csv('birthsSingapore.csv', header=FALSE)
+
+# creating relative percentage numbers for comparison
+aussie$percent = aussie$V2/sum(aussie$V2)
+dutch$percent = dutch$V2/sum(dutch$V2)
+sing$percent = sing$V2/sum(sing$V2)
+
+names = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+months <- aussie$V1
+months = dutch$V1
+months = sing$V1
+
+dataframe2 = data.frame(cbind(aussie$V2),names,months)
+dataframe3 = data.frame(cbind(dutch$V2), names, months)
+dataframe4 = data.frame(cbind(sing$V2), names, months)
+
+# Values show difference in relative birth rates by month
+aussie$diffdutch = aussie$percent - dutch$percent
+aussie$diffsing = aussie$percent - sing$percent
+dutch$diffsing = dutch$percent - sing$percent
+
+meandiff.aus.dutch = mean(aussie$diffdutch)
+meandiff.aus.sing = mean(aussie$diffsing)
+meandiff.dutch.sing = mean(dutch$diffsing)
+
+sd.aus.dutch = sd(aussie$diffdutch)
+sd.aus.sing = sd(aussie$diffsing)
+sd.dutch.sing = sd(dutch$diffsing)
+
+# Pie charts of births throughout a year
+ggplot(dataframe2, aes(x="", y=aussie$V2, fill=months))+
+  geom_bar(width = 1, stat = "identity")+ 
+  scale_y_reverse()+
+  coord_polar("y")+
+  ylab("Relative Frequency of Birth")+
+  labs(fill='Number of Month in Year')
+
+ggplot(dataframe2, aes(x="", y=dutch$V2, fill=months))+
+  geom_bar(width = 1, stat = "identity")+ 
+  scale_y_reverse()+
+  coord_polar("y")+
+  ylab("Relative Frequency of Birth")+
+  labs(fill='Number of Month in Year')
+
+ggplot(dataframe2, aes(x="", y=sing$V2, fill=months))+
+  geom_bar(width = 1, stat = "identity")+ 
+  scale_y_reverse()+
+  coord_polar("y")+
+  ylab("Relative Frequency of Birth")+
+  labs(fill='Number of Month in Year')
+
+# bar graphs noting the differences between relative birth rates
+
+ggplot(dataframe2, aes(x=aussie$V1, y=aussie$diffdutch))+
+  geom_bar(mapping = aes(fill = aussie$V1), stat='summary', fun.y=mean)+
+  geom_hline(yintercept = meandiff.aus.dutch, colour = "red", lwd = 1)+
+  geom_hline(yintercept = meandiff.aus.dutch - sd.aus.dutch)+
+  geom_hline(yintercept = meandiff.aus.dutch + sd.aus.dutch)+
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  scale_colour_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  xlab("Month of Birth")+
+  ylab("Difference in Relative Distributions of Births")+
+  ggtitle("Difference in Relative Distributions of Births, Australia vs the Netherlands Live Births")+
+  labs(fill='Number of Month in Year')
+
+
+ggplot(dataframe3, aes(x=aussie$V1, y=aussie$diffsing))+
+  geom_bar(mapping = aes(fill = aussie$V1), stat='summary', fun.y=mean)+
+  geom_hline(yintercept = meandiff.aus.sing, colour = "red", lwd = 1)+
+  geom_hline(yintercept = meandiff.aus.sing - sd.aus.sing)+
+  geom_hline(yintercept = meandiff.aus.sing + sd.aus.sing)+
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  scale_colour_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  xlab("Month of Birth")+
+  ylab("Difference in Relative Distributions of Births")+
+  ggtitle("Difference in Relative Distributions of Births, Australia vs Singapore Live Births")+
+  labs(fill='Number of Month in Year')
+
+
+ggplot(dataframe4, aes(x=dutch$V1, y=dutch$diffsing))+
+  geom_bar(mapping = aes(fill = dutch$V1), stat='summary', fun.y=mean)+
+  geom_hline(yintercept = meandiff.dutch.sing, colour = "red", lwd = 1)+
+  geom_hline(yintercept = meandiff.dutch.sing - sd.dutch.sing)+
+  geom_hline(yintercept = meandiff.dutch.sing + sd.dutch.sing)+
+  scale_x_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  scale_colour_discrete(limits = c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))+
+  xlab("Month of Birth")+
+  ylab("Difference in Relative Distributions of Births")+
+  ggtitle("Difference in Relative Distributions of Births, the Netherlands vs Singapore Live Births")+
+  labs(fill='Number of Month in Year')
+
 #creating a plot showing the amount of births on specific DAYS using the wikipedia data
 #read in the csv file and determine mean and standard deviation
 bdays = read.csv('birthdates.csv', header=FALSE)
