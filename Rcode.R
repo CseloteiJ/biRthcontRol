@@ -126,3 +126,24 @@ geom_hline(yintercept = meanfreq + deviation, colour = "grey")+
 xlab("Month of Birth") +
 ylab("Frequency") +
 ggtitle("Amount of Births in Australia per Month as Registered by UN")
+
+#creating a plot showing the amount of births on specific DAYS using the wikipedia data
+#read in the csv file and determine mean and standard deviation
+bdays = read.csv('birthdates.csv', header=FALSE)
+dataframe <- as.data.frame(table(bdays))
+meanfreq = mean(dataframe$Freq)
+deviation = sd(dataframe$Freq)
+names = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+dates <- dataframe$V1
+dataframe2 = data.frame(cbind(dataframe$Freq),names,dates)
+#create the actual plot
+ggplot(dataframe2, aes(names, dataframe$Freq)) +   
+geom_bar(aes(fill = dates), position = "dodge", stat="identity") + scale_x_discrete(limits=names) +
+geom_hline(yintercept = meanfreq, colour = "red", lwd = 1) +
+geom_hline(yintercept = meanfreq - deviation, colour = "grey")+
+geom_hline(yintercept = meanfreq + deviation, colour = "grey")+
+xlab("Month of Birth") +
+ylab("Frequency") +
+ggtitle("Frequency of Births per Day as Registered on Wikipedia") +
+labs(fill='Day number in Month')
+
