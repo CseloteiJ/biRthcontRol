@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+
+import argparse, json, logging, csv, re, sys, codecs, re
+from pathlib import Path
+import pandas as pd
+
+
+livebirthdataset = []
+    
+with open("livebirthdata.csv") as file:
+    data = csv.reader(file, delimiter = ",")
+    file.readline()
+    for row in data:
+        if len(row) > 6: 
+            if not any(x in row[3] for x in ['Total', ' ', 'Unknown']):
+                if not any(x in row[7] for x in ['.']):
+                    livebirthdataset.append(row)
+
+livebirthmonth = [item[3] for item in livebirthdataset]
+livebirthtotal = [item[7] for item in livebirthdataset]
+
+#livebirthtotal = list(map(int, livebirthtotal))
+
+livebirthData = [[i, j] for i, j in zip(livebirthmonth, livebirthtotal)]
+
+totalbirthsDict = {"January": 0, "February":0, "March":0, "April":0, "May":0, "June":0, "July":0, "August":0, "September":0, "October":0, "November":0, "December":0}
+for item in livebirthData:
+    totalbirthsDict[item[0]] += int(item[1])
+
+livebirthtotal = list(totalbirthsDict.items())
+    
+
+
+with open("livebirths.csv", "w") as output:
+    writer = csv.writer(output)
+    writer.writerows(livebirthtotal)
