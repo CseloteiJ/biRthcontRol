@@ -18,7 +18,7 @@ dataframe$bdays = as.factor(dataframe$bdays)
 dataframe$bdays[0]
 
 ggplot()+
-  geom_bar(mapping = aes(x=dataframe$bdays, y=dataframe$Freq), stat='summary', fun.y=mean)+
+  geom_bar(mapping = aes(x=dataframe$bdays, y=dataframe$Freq), stat='summary', fun.y=mean, fill = "black")+
   geom_hline(yintercept = meanfreq, colour = "red", lwd = 1)+
   geom_hline(yintercept = meanfreq - deviation)+
   geom_hline(yintercept = meanfreq + deviation)+
