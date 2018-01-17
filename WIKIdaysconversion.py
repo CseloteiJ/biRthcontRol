@@ -3,10 +3,13 @@
 
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+#import packages
 import argparse, json, logging, csv, re, sys, codecs, re
 from pathlib import Path
 import pandas as pd
 
+#david's code
 floatre = re.compile("^\d+\.\d+$")
 intre = re.compile("^\d+$")
 
@@ -37,13 +40,14 @@ def process_csv(file, header):
         fd.close()
     return out
 
+#choose included columns
 includedcols = ["birthDate"]
 indexedIC = []
 for item in includedcols:
     indexedIC.append(header.index(item))
-    
+ 
+#iterate through year files and add to a list
 peoplelist = []        
-
 for year in range(1900,2018):
     filepath = Path(str(year))
     
@@ -52,14 +56,14 @@ for year in range(1900,2018):
         for element in data:
             peoplelist.append([element[x] for x in indexedIC])
 
+#create a new list containing the relevant data (5:10)
 monthsDays = []
-
 for element in peoplelist:
     for date in element:
         if not any(x in date for x in ['{', 'T', '}']): 
             monthsDays.append(date[5:10])
         
-    
+#write data to a CSV file
 with open('birthDays.csv', 'w') as file:
     csvwriter = csv.writer(file, delimiter=',')
     for item in monthsDays:
