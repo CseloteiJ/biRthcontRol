@@ -1,0 +1,13 @@
+library("tidyverse")
+library("ggplot2")
+library("")
+
+livebirths = read.csv('livebirths.csv', header=FALSE)
+livebirths$V1 = c("January" = "Jan","February"="Feb","March" = "Mar","April" = "Apr","May" = "May","June" = "Jun","July" = "Jul","August" = "Aug","September" = "Sep","October" = "Oct","November" = "Nov","December" = "Dec")
+
+ggplot(data =livebirths) +
+geom_bar(mapping = aes(x=V1, y=V2), stat = "identity") +
+scale_x_discrete(limits = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")) +
+xlab("Month of Birth") +
+ylab("Frequency") +
+ggtitle("Amount of Births per Month as Registered by UN")
