@@ -1,0 +1,19 @@
+library("tidyverse")
+library("ggplot2")
+library("")
+
+bdays = read.csv('birthdates.csv', header=FALSE)
+
+dataframe <- as.data.frame(table(bdays))
+meanfreq = mean(dataframe$Freq)
+deviation = sd(dataFrame$Freq)
+names = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+dates <- dataframe$V1
+dataframe2 = data.frame(cbind(freq),names,dates)
+
+ggplot(dataframe2, aes(names, Freq)) +   
+geom_bar(aes(fill = dates), position = "dodge", stat="identity") + scale_x_discrete(limits=names) +
+xlab("Month of Birth") +
+ylab("Frequency") +
+ggtitle("Frequency of Births per Day as Registered on Wikipedia") +
+labs(fill='Day number in Month')
