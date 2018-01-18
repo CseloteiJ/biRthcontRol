@@ -241,3 +241,8 @@ ylab("Frequency") +
 ggtitle("Frequency of Births per Day as Registered on Wikipedia") +
 labs(fill='Day number in Month')
 
+#create stargazer tables for the latex file:
+install.packages("stargazer")
+library("stargazer")
+stargazer(reallife)
+stargazer(days$months)
